@@ -62,11 +62,22 @@ function handleFigures() {
                 sortButton.classList.add("button_selected")
                 console.log(sortButton)
 
-                figures.forEach(figures => {
-                    if (figure.classList.contains("1"))
+                figures.forEach( figure => {
+                    figure.classList.remove("show_element", "hide_element")
+                    let figureCategory = figure.classList.value
+                    let buttonClasses = Array.from(sortButton.classList)
+
+                    if (buttonClasses.includes("0")) {
+                        figure.classList.add("show_element")
+                    }
+
+                    if (buttonClasses.some((buttonClasses) => figureCategory.includes(buttonClasses))) {
+                        figure.classList.add("show_element")
+                    } else {
+                        figure.classList.add("hide_element")
+                    }
                 })
             }
-    
         });
     })
 }
