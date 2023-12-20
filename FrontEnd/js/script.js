@@ -2,6 +2,7 @@ import {test} from './test.js'
 
 
 let works = null
+let figures = null
 
 async function getWorks() {
     const reponse = await fetch("http://localhost:5678/api/works")
@@ -34,29 +35,41 @@ async function init() {
         figCaption.innerHTML = works[i].title
         figure.appendChild(figCaption)
     });
+    figures = document.querySelectorAll(".gallery figure")
+    console.log(figures)
+    
     console.log(category)
     console.log(gallery)
+
+    handleFigures()
+}
+
+function handleFigures() {
+    console.log(figures)
+
+    let sortingButtons = document.querySelectorAll(".sort_button")
+
+    function removeSelected () {
+	    sortingButtons.forEach(sortButton => {
+		    sortButton.classList.remove("button_selected")
+	    })
+    }
+
+    sortingButtons.forEach((sortButton) => {
+        sortButton.addEventListener ("click", (event) => {
+            if (event.button === 0) {
+                removeSelected()
+                sortButton.classList.add("button_selected")
+                console.log(sortButton)
+
+                figures.forEach(figures => {
+                    if (figure.classList.contains("1"))
+                })
+            }
+    
+        });
+    })
 }
 
 init()
 
-
-
-let sortingButtons = document.querySelectorAll("sort_button")
-
-function removeSelected () {
-	sortingButtons.forEach(sortButton => {
-		sortButton.classList.remove("button_selected")
-	})
-}
-
-
-sortingButtons.forEach((sortButton) => {
-    sortButton.addEventListener ("click", (event) => {
-        if (event.button === 0) {
-            removeSelected()
-            sortButton.classList.add("button_selected")
-        }
-    
-    });
-})

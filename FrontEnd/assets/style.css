@@ -192,21 +192,29 @@ footer nav ul {
 	justify-content: center;
 	
 	margin: 51px 0px;
+}
 
-	button {
-		border-radius: 60px;
-		border: 1px solid #1D6154;
-		background: transparent;
-		color:#1D6154;
-		font-size: 16px;
-		font-weight: 700;
-		min-width: 100px;
-		padding: 0 11px;
-		height: 37px;
-	}
+.sort_button {
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+	background: transparent;
+	color:#1D6154;
+	font-size: 16px;
+	font-weight: 700;
+	min-width: 100px;
+	padding: 0 11px;
+	height: 37px;
 }
 
 .button_selected {
 	background: #1D6154;
 	color: #FFF
+}
+
+.hide_element {
+	display: none;
+}
+
+.show_element {
+	display: block;
 }
