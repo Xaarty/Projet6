@@ -2,29 +2,36 @@ import {test} from './test.js'
 
 
 let works = null
-let figures = null
+let categories = null
 
 async function getWorks() {
     const reponse = await fetch("http://localhost:5678/api/works")
-    const films = await reponse.json()
-    return films
+    const work = await reponse.json()
+    return work
 }  
 
+async function getCategories() {
+    const reponse = await fetch("http://localhost:5678/api/categories")
+    const category = await reponse.json()
+    return category
+}
+
 const gallery = document.querySelector(".gallery")
-let category = 0
+const portfolio = document.getElementById("portfolio")
 
 async function init() {
     works = await getWorks()
+    categories = await getCategories()
+    console.log(categories)
     test()
     
     console.log(works)
-
-    works.forEach((work, i) => {
-
-        let figure = document.createElement("figure")
-        gallery.appendChild(figure)
+    createWork(works)
+    createButtonCategory(categories)
+        /*
         let imgCategory = works[i].categoryId
         figure.classList.add(imgCategory)
+        figure.setAttribute('data-id', imgCategory)
 
         let imgGallery = document.createElement("img")
         imgGallery.src = `${works[i].imageUrl}`
@@ -34,34 +41,35 @@ async function init() {
         let figCaption = document.createElement("figcaption")
         figCaption.innerHTML = works[i].title
         figure.appendChild(figCaption)
-    });
-    figures = document.querySelectorAll(".gallery figure")
-    console.log(figures)
+        */
+
     
-    console.log(category)
+    
+    
     console.log(gallery)
 
-    handleFigures()
+    handleFilter()
 }
 
-function handleFigures() {
-    console.log(figures)
+function handleFilter() {
+    
 
     let sortingButtons = document.querySelectorAll(".sort_button")
-
-    function removeSelected () {
-	    sortingButtons.forEach(sortButton => {
-		    sortButton.classList.remove("button_selected")
-	    })
-    }
 
     sortingButtons.forEach((sortButton) => {
         sortButton.addEventListener ("click", (event) => {
             if (event.button === 0) {
-                removeSelected()
+                removeSelected(sortingButtons)
                 sortButton.classList.add("button_selected")
                 console.log(sortButton)
-
+                if (sortButton.dataset.id == 0) {
+                    createWork(works)
+                } else {
+                    const filterWorks = works.filter((work) => work.categoryId == sortButton.dataset.id)
+                    console.log(filterWorks)
+                    createWork(filterWorks)
+                }
+                /*
                 figures.forEach( figure => {
                     figure.classList.remove("show_element", "hide_element")
                     let figureCategory = figure.classList.value
@@ -76,7 +84,7 @@ function handleFigures() {
                     } else {
                         figure.classList.add("hide_element")
                     }
-                })
+                })*/
             }
         });
     })
@@ -84,3 +92,44 @@ function handleFigures() {
 
 init()
 
+function createWork (works) {
+    gallery.innerHTML=""
+    works.forEach((work) => {
+
+        let figure = document.createElement("figure")
+        //mentorat
+        figure.innerHTML=`
+            <img src="${work.imageUrl}" alt="${work.title}"/>
+            <figcaption>${work.title}<figcaption/>
+        `
+        gallery.appendChild(figure)
+    })
+}
+
+function createButtonCategory(categories) {
+    let sortingButtons = document.createElement("div")
+    sortingButtons.id = "sorting_buttons"
+    portfolio.insertBefore(sortingButtons, gallery)
+
+    let allButton = document.createElement("button")
+    allButton.classList.add("sort_button")
+    allButton.dataset.id = "0"
+    allButton.innerHTML = "<p>Tous</p>"
+    sortingButtons.appendChild(allButton)
+
+    categories.forEach((category) => {
+        let sortButton = document.createElement("button")
+        sortButton.classList.add("sort_button")
+        sortButton.dataset.id = `${category.id}`
+        sortButton.innerHTML=`
+            <p>${category.name}<p/>
+        `
+        sortingButtons.appendChild(sortButton)
+    })
+}
+
+function removeSelected (sortingButtons) {
+    sortingButtons.forEach(sortButton => {
+        sortButton.classList.remove("button_selected")
+    })
+}
