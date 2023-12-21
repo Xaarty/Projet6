@@ -30,6 +30,11 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background-color: #FFFEF8;
+}
+footer {
+	background: #FFF;
+	height: 60px;
 }
 ol, ul {
 	list-style: none;
@@ -168,7 +173,7 @@ margin: auto;
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+#contact input[type="submit"]{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -217,4 +222,68 @@ footer nav ul {
 
 .show_element {
 	display: block;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+
+
+
+#section_login {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 150px 0 355px 0;
+}
+
+#section_login h1 {
+	color: #1D6154;
+	font-size: 30px;
+	font-weight: 700;
+}
+
+
+#section_login form {
+	text-align: left;
+	margin-top:7px;
+	display: flex;
+	flex-direction: column;
+}
+
+#section_login input[type="email"],
+#section_login input[type="password"] {
+	height: 51px;
+	width: 379px;
+	font-size: 1.2em;
+	border: none;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#section_login label {
+	margin: 30px 0 7px 0;
+	color: #3D3D3D;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+
+#section_login input[type="submit"]{
+	font-family: 'Syne';
+	font-weight: 700;
+	font-size: 14px;
+	color: white;
+	background-color: #1D6154;
+	margin : 37px auto 28px auto;
+	width: 179px;
+	height: 36px;
+	text-align: center;
+	border-radius: 60px;
+	box-shadow: none;
+}
+
+#section_login p {
+	align-self: center;
+	text-decoration: underline;
 }
