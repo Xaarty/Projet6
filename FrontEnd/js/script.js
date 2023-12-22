@@ -4,6 +4,34 @@ import {test} from './test.js'
 let works = null
 let categories = null
 
+async function getIds() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    try {
+        const response = await fetch("http://localhost:5678/api/users/login", {
+            method: "POST",
+            headers: { "Content-Type" : "application/json" },
+            body: JSON.stringify({email, password})
+        })
+        console.log(response)
+        if (!response.ok) {
+            throw new Error('Identifiants invalides');
+        }
+        const { userId, token, responseData } = await response.json();
+        const { returnedEmail, returnedPassword } = responseData;
+        console.log(userId, token, returnedEmail, returnedPassword)
+        localStorage.setItem('userId', userId);
+        localStorage.setItem('token', token);
+        localStorage.setItem('email', returnedEmail);
+        localStorage.setItem('password', returnedPassword);
+
+        window.location.href = "/dashboard";
+    } catch (error) {
+        console.error('Erreur lors de la connexion:', error.message);
+    }
+} 
+
 async function getWorks() {
     const reponse = await fetch("http://localhost:5678/api/works")
     const work = await reponse.json()
@@ -133,3 +161,7 @@ function removeSelected (sortingButtons) {
         sortButton.classList.remove("button_selected")
     })
 }
+
+
+
+
