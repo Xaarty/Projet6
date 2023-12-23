@@ -283,7 +283,7 @@ a {
 	box-shadow: none;
 }
 
-#section_login p {
+#section_login a {
 	align-self: center;
 	text-decoration: underline;
 }
