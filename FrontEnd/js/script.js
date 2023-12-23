@@ -133,3 +133,7 @@ function removeSelected (sortingButtons) {
         sortButton.classList.remove("button_selected")
     })
 }
+
+
+
+
