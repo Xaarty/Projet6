@@ -287,3 +287,7 @@ a {
 	align-self: center;
 	text-decoration: underline;
 }
+
+#password::placeholder {
+	color: red;
+}

@@ -137,3 +137,9 @@ function removeSelected (sortingButtons) {
 
 
 
+const loggedIn = localStorage.getItem('loggedIn')
+console.log(loggedIn)
+const userId = localStorage.getItem('userId')
+console.log(userId)
+const token = localStorage.getItem('token')
+console.log(token)
