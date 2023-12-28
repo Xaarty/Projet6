@@ -158,8 +158,7 @@ if (loggedIn === "true") {
             localStorage.setItem('loggedIn', 'false')
             localStorage.removeItem('token')
             localStorage.removeItem('userId')
-            window.location.href='index.html'
-            
+            window.location.href='index.html'  
         }
     })
 }
