@@ -115,6 +115,9 @@ function createButtonCategory(categories) {
     allButton.classList.add("sort_button")
     allButton.dataset.id = "0"
     allButton.innerHTML = "<p>Tous</p>"
+    if (allButton.dataset.id === "0") {
+        allButton.classList.add("button_selected")
+    }
     sortingButtons.appendChild(allButton)
 
     categories.forEach((category) => {
@@ -141,5 +144,21 @@ const loggedIn = localStorage.getItem('loggedIn')
 console.log(loggedIn)
 const userId = localStorage.getItem('userId')
 console.log(userId)
-const token = localStorage.getItem('token')
-console.log(token)
+const storedtoken = localStorage.getItem('token')
+console.log(storedtoken)
+
+let logs = document.getElementById("logs")
+
+if (loggedIn === "true") {
+    logs.innerHTML = "logout"
+
+    logs.addEventListener(("click"), (event) => {
+        if (event.button === 0) {
+            event.preventDefault()
+            localStorage.setItem('loggedIn', 'false')
+            localStorage.removeItem('token')
+            localStorage.removeItem('userId')
+            window.location.href='index.html'  
+        }
+    })
+}
