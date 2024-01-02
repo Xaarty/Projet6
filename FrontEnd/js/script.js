@@ -105,7 +105,7 @@ function createWork (works) {
         //mentorat
         figure.innerHTML=`
             <img src="${work.imageUrl}" alt="${work.title}"/>
-            <figcaption>${work.title}<figcaption/>
+            <figcaption>${work.title}</figcaption>
         `
         gallery.appendChild(figure)
     })
@@ -170,6 +170,10 @@ function log () {
         `
         portfolio.appendChild(buttonOpenModale)
         portfolioH2.style.marginBottom = "92px"
+
+
+        const modaleProjects = new FormData(document.getElementById("portfolio"));
+        console.log(modaleProjects)
         
         const buttonCloseModale = document.getElementById("button_close_modale")
         const overlay = document.getElementById("overlay")
@@ -207,5 +211,6 @@ function log () {
         })
     }else{
         modale.remove()
+        overlay.remove()
     }
 }
