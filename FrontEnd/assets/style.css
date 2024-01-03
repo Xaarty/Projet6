@@ -467,7 +467,9 @@ a {
 
 #gallery_photo {
 	padding: 0 105px;
-
+	display: grid;
+	grid-template-columns: repeat(5, auto);
+	column-gap: 6.23px;
 }
 
 #line {
@@ -499,4 +501,29 @@ a {
 	height: 100%;
 	background: rgba(0, 0, 0, 0.30);
 	display: none;
+}
+
+.delete_work_photo {
+	display: grid;
+	width: 78.123px;
+	height: 104.08px;
+}
+
+.delete_work_photo img {
+	object-fit: cover;
+	width: 78.123px;
+	height: 104.08px;
+}
+
+.delete_work {
+	display: grid;
+	width: 17px;
+	height: 17px;
+	border-radius: 2px;
+	background: #000000;
+	position: absolute;
+	justify-content: center;
+	align-items: center;
+	margin: 6.43px 0 0 54.53px;
+	border: none;
 }
