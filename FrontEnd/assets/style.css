@@ -201,6 +201,11 @@ li:hover {
 	color: #B1663C;
 }
 
+li img {
+	width: 22px;
+	height: 22px;
+}
+
 #introduction {
 	margin-top: 92px;
 	display: flex;
@@ -352,13 +357,6 @@ footer nav ul {
 	color: #FFF
 }
 
-.hide_element {
-	display: none;
-}
-
-#show_element {
-	display: block;
-}
 
 a {
 	text-decoration: none;
@@ -429,7 +427,7 @@ a {
 	color: red;
 }
 
-.modale {
+.modale_delete, .modale_add {
 	width: 630px;
 	height: 680px;
 	display: none;
@@ -442,22 +440,39 @@ a {
 
 }
 
-#button_close_modale {
+.modale_header {
+	display: grid;
+}
+
+.button_close_modale {
 	width: 24px;
 	height: 24px;
 	margin: 26px 30px 10px 0;
 	display: grid;
+	grid-row: 1;
 	justify-self: end;
 	justify-content: center;
 	background: transparent;
 	border: none;
 }
 
-#button_close_modale svg {
+.button_close_modale svg {
 	margin-top: -3px;
 }
 
-.modale h2 {
+.button_open_modale_delete {
+	width: 21px;
+    height: 21px;
+    margin: 26px 0px 10px 30px;
+    display: grid;
+	grid-row: 1;
+	grid-column: -1/1;
+    justify-content: center;
+    background: transparent;
+    border: none;
+}
+
+.modale_delete h2 {
 	text-align: center;
 	color: #000;
 	font-family: 'Work sans';
@@ -526,4 +541,13 @@ a {
 	align-items: center;
 	margin: 6.43px 0 0 54.53px;
 	border: none;
+}
+
+
+.test {
+	display: grid;
+}
+
+.test2 {
+	display: block !important;
 }
