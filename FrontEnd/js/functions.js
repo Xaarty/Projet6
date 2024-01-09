@@ -3,8 +3,15 @@ const portfolio = document.getElementById("portfolio")
 
 const logs = document.getElementById("logs")
 const modaleDelete = document.querySelector(".modale_delete")
+const modaleAdd = document.querySelector(".modale_add")
 const portfolioH2 = document.querySelector("#portfolio h2")
 const modaleGallery = document.getElementById("gallery_photo")
+const modaleDisplayButton = document.querySelectorAll(".modale_display_button")
+const image = document.getElementById("image")
+const inputImg = document.getElementById("input_img")
+const imageInput = document.getElementById("image");
+const inputImgContent = document.getElementById("input_img_content")
+// fonction asynchrone pour effacer les projets 
 
 async function handleDeletWork (deleteWork, storedToken) {
     try {
@@ -24,7 +31,7 @@ async function handleDeletWork (deleteWork, storedToken) {
             galleryFigureToRemove.forEach((figure) => {
                 figure.remove()
             })
-            modaleDisplay()
+            modaleAddDisplay()
         }else{
             console.error("Failed to delete work. Server response: ${errorText}")
         }
@@ -33,6 +40,9 @@ async function handleDeletWork (deleteWork, storedToken) {
         console.error("error during delete:", error.message)
     }
 }
+
+
+// fonction pour importer les travaux de "getWorks" dans la section portfolio 
 
 export function createWork (works) {
     gallery.innerHTML=""
@@ -49,6 +59,8 @@ export function createWork (works) {
         gallery.appendChild(figure)
     })
 }
+
+// fonction pour filtrer les catégories des travaux et afficher ceux concerner 
 
 export function handleFilter(works) {
     
@@ -73,13 +85,15 @@ export function handleFilter(works) {
     })
 }
 
+// fonction pour enlever la classe "button_selected"
+
 function removeSelected (sortingButtons) {
     sortingButtons.forEach(sortButton => {
         sortButton.classList.remove("button_selected")
     })
 }
 
-
+// fonction pour générer les travaux existant dans la partie gallerie de la modaledelete
 
 export function createGalleryWork (works) {
     modaleGallery.innerHTML=""
@@ -99,6 +113,8 @@ export function createGalleryWork (works) {
         modaleGallery.appendChild(figure)
     })
 }
+
+// fonction pour créer les boutons de tri de catégories des travaux
 
 export function createButtonCategory(categories) {
     let sortingButtons = document.createElement("div")
@@ -125,12 +141,7 @@ export function createButtonCategory(categories) {
     })
 }
 
-
-
-
-
-
-
+// fonction qui gère la connexion de la cliente à son compte pour pouvoir gérer ses travaux
 
 export function log () {
     const loggedIn = localStorage.getItem('loggedIn')
@@ -141,6 +152,8 @@ export function log () {
     console.log(storedtoken)
 
     const sortingButtons = document.getElementById("sorting_buttons")
+
+    // gère le cas ou la cliente est loggin, enleve le tri de catégories, met à la place un bouton pour ouvrir la modale
 
     if (loggedIn === "true") {
         logs.innerHTML = "logout"
@@ -157,43 +170,28 @@ export function log () {
         portfolio.appendChild(buttonOpenModale)
         portfolioH2.style.marginBottom = "92px"
 
-
-        
-        
-       /* const buttonCloseModale = document.querySelector(".button_close_modale")*/
+        // gère la fermeture de la modale
         const overlay = document.getElementById("overlay")
         const toogleButton = document.querySelectorAll(".toogle_modale")
-
+        console.log(toogleButton)
         toogleButton.forEach((button) => {
             button.addEventListener("click", (event) => {
                 if (event.button === 0) {
-                    modaleDisplay()
+                    modaleDeleteDisplay()
+                    if (modaleAdd.classList.contains("display_modale")) {
+                        if (inputImg.querySelector("img")) {
+                            inputImgContent.style.display = "grid"
+                            let imgToRemove = inputImg.querySelector("img")
+                            imgToRemove.remove()
+                        }
+                        modaleAdd.classList.toggle("display_modale")
+                        modaleDelete.classList.toggle("display_modale")
+                    }
                 } 
             });
         })
-
-        /*buttonOpenModale.addEventListener("click", (event) => {
-            if (event.button === 0) {
-                modaleDelete.style.display = "grid";
-                overlay.style.display = "block"
-            }   
-        });
-
-
-        buttonCloseModale.addEventListener("click", (event) => {
-            if (event.button === 0) {
-                modaleDelete.style.display = "none"
-                overlay.style.display = "none"
-            }
-        })
-
-        overlay.addEventListener(("click"), (event) => {
-            if (event.button ===0) {
-                modaleDelete.style.display = "none"
-                overlay.style.display = "none"
-            }
-        })*/
-
+        
+        // gère le logout
         logs.addEventListener(("click"), (event) => {
             if (event.button === 0) {
                 event.preventDefault()
@@ -204,6 +202,7 @@ export function log () {
             }
         })
 
+        // gère la suppression de travaux au clic
         const deleteWorks = document.querySelectorAll(".delete_work")
         console.log(deleteWorks)
 
@@ -214,15 +213,43 @@ export function log () {
                 }
             })
         })
-
+        
+        // change de modale au clic
+        modaleDisplayButton.forEach((button) => {
+            button.addEventListener("click", (event) => {
+                if (event.button === 0) {
+                    modaleAddDisplay();
+                }
+            });
+        });
+    // gère le cas ou on n'est pas loggin, enleve l'acces aux modales
     }else{
         modaleDelete.remove()
         overlay.remove()
     }
 }
 
+function imagePreview(event) {
+    console.log("File selected:", event.target.files[0]);
 
-function modaleDisplay () {
-    modaleDelete.classList.toggle("test")
-    overlay.classList.toggle("test2")
+    let imageDownloaded = URL.createObjectURL(event.target.files[0]);
+    let newImage = document.createElement("img");
+    newImage.src = imageDownloaded;
+    newImage.classList.add("image_preview")
+    inputImg.appendChild(newImage);
+    inputImgContent.style.display = "none"
+}
+
+imageInput.addEventListener("change", imagePreview);
+
+
+
+function modaleDeleteDisplay () {
+    modaleDelete.classList.toggle("display_modale")
+    overlay.classList.toggle("display_overlay")
+}
+
+function modaleAddDisplay () {
+    modaleDelete.classList.toggle("display_modale")
+    modaleAdd.classList.toggle("display_modale")
 }
