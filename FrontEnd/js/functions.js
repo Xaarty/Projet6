@@ -7,10 +7,10 @@ const modaleAdd = document.querySelector(".modale_add")
 const portfolioH2 = document.querySelector("#portfolio h2")
 const modaleGallery = document.getElementById("gallery_photo")
 const modaleDisplayButton = document.querySelectorAll(".modale_display_button")
-const image = document.getElementById("image")
 const inputImg = document.getElementById("input_img")
 const imageInput = document.getElementById("image");
 const inputImgContent = document.getElementById("input_img_content")
+const listSubmit = document.getElementById("list")
 // fonction asynchrone pour effacer les projets 
 
 async function handleDeletWork (deleteWork, storedToken) {
@@ -138,6 +138,12 @@ export function createButtonCategory(categories) {
             <p>${category.name}<p/>
         `
         sortingButtons.appendChild(sortButton)
+
+        let categorySubmit = document.createElement("option")
+        categorySubmit.value=`${category.name}`
+        categorySubmit.innerHTML=`${category.name}`
+
+        listSubmit.appendChild(categorySubmit)
     })
 }
 
@@ -148,8 +154,8 @@ export function log () {
     console.log(loggedIn)
     const userId = localStorage.getItem('userId')
     console.log(userId)
-    const storedtoken = localStorage.getItem('token')
-    console.log(storedtoken)
+    const storedToken = localStorage.getItem('token')
+    console.log(storedToken)
 
     const sortingButtons = document.getElementById("sorting_buttons")
 
@@ -170,8 +176,7 @@ export function log () {
         portfolio.appendChild(buttonOpenModale)
         portfolioH2.style.marginBottom = "92px"
 
-        // gère la fermeture de la modale
-        const overlay = document.getElementById("overlay")
+        // gère la fermeture de la modale   
         const toogleButton = document.querySelectorAll(".toogle_modale")
         console.log(toogleButton)
         toogleButton.forEach((button) => {
@@ -209,7 +214,7 @@ export function log () {
         deleteWorks.forEach((deleteWork) => {
             deleteWork.addEventListener(("click"), (event) => {
                 if (event.button === 0) {
-                    handleDeletWork(deleteWork, storedtoken)
+                    handleDeletWork(deleteWork, storedToken)
                 }
             })
         })
@@ -222,12 +227,41 @@ export function log () {
                 }
             });
         });
+
+        // fonction pour l'envoie de nouveaux projets
+
+        const form = document.getElementById("form")
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault()
+            const formData = new FormData(form);
+            const imageValue = formData.get('image');
+            const titleValue = formData.get('title');
+            const categoryValue = formData.get('list');
+
+            formData.append('image', imageValue);
+            formData.append('title', titleValue);
+            formData.append('category', categoryValue);
+
+            console.log(categoryValue);
+            console.log(imageValue);
+            console.log(titleValue);
+            console.log(formData);
+
+            sendWork(formData, storedToken)
+    })
+
+    
+
+
     // gère le cas ou on n'est pas loggin, enleve l'acces aux modales
     }else{
         modaleDelete.remove()
         overlay.remove()
     }
 }
+
+// fonction qui gère la prévisualisation des images
 
 function imagePreview(event) {
     console.log("File selected:", event.target.files[0]);
@@ -252,4 +286,29 @@ function modaleDeleteDisplay () {
 function modaleAddDisplay () {
     modaleDelete.classList.toggle("display_modale")
     modaleAdd.classList.toggle("display_modale")
+}
+
+async function sendWork (formData, storedToken) {
+    try {
+        const authorizationHeader = `Bearer ${storedToken}`;
+        console.log('Authorization Header:', authorizationHeader);
+        const response = await fetch(`http://localhost:5678/api/works`, {
+            method: "Post",
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${storedToken}`,
+                'Content-Type': 'multipart/form-data'
+            },
+            body: formData,
+        });
+        if (response.ok) {
+            console.log("added")
+            
+        }else{
+            console.error("Failed to add work. Server response: `${errorText}`")
+        }
+    } 
+    catch (error) {
+        console.error("error during add:", error.message)
+    }
 }
