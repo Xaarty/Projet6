@@ -18,8 +18,6 @@ async function getCategories() {
 
 
 
-
-
 async function init() {
     works = await getWorks()
     categories = await getCategories()

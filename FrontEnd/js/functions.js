@@ -230,9 +230,9 @@ export function log () {
 
         // fonction pour l'envoie de nouveaux projets
 
-        const form = document.getElementById("form")
+        const formWork = document.getElementById("form")
 
-        form.addEventListener("submit", (event) => {
+        formWork.addEventListener("submit", (event) => {
             event.preventDefault()
             const formData = new FormData(form);
             const imageValue = formData.get('image');
@@ -249,9 +249,30 @@ export function log () {
             console.log(formData);
 
             sendWork(formData, storedToken)
-    })
+        })
 
-    
+        const form = document.getElementById("form");
+
+    // // Add an event listener for the form submission
+    // form.addEventListener("submit", async (event) => {
+    //     // Prevent the default form submission
+    //     event.preventDefault();
+
+    //     // Create a FormData object from the form
+    //     const formData = new FormData(form);
+
+    //     // Check if the FormData is empty
+    //     if (formData.has("image") || formData.has("title") || formData.has("list")) {
+    //         // The FormData is not empty, proceed with the API request
+    //         console.log("not empty")
+    //         const storedToken = localStorage.getItem('token');
+    //         await sendWork(formData, storedToken);
+    //     } else {
+    //         // The FormData is empty, display an error or take appropriate action
+    //         console.error("FormData is empty. Please fill out the form before submitting.");
+    //     }
+    // });
+
 
 
     // gère le cas ou on n'est pas loggin, enleve l'acces aux modales
@@ -286,29 +307,4 @@ function modaleDeleteDisplay () {
 function modaleAddDisplay () {
     modaleDelete.classList.toggle("display_modale")
     modaleAdd.classList.toggle("display_modale")
-}
-
-async function sendWork (formData, storedToken) {
-    try {
-        const authorizationHeader = `Bearer ${storedToken}`;
-        console.log('Authorization Header:', authorizationHeader);
-        const response = await fetch(`http://localhost:5678/api/works`, {
-            method: "Post",
-            headers: {
-                'accept': 'application/json',
-                'Authorization': `Bearer ${storedToken}`,
-                'Content-Type': 'multipart/form-data'
-            },
-            body: formData,
-        });
-        if (response.ok) {
-            console.log("added")
-            
-        }else{
-            console.error("Failed to add work. Server response: `${errorText}`")
-        }
-    } 
-    catch (error) {
-        console.error("error during add:", error.message)
-    }
 }
