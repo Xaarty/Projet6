@@ -140,7 +140,7 @@ export function createButtonCategory(categories) {
         sortingButtons.appendChild(sortButton)
 
         let categorySubmit = document.createElement("option")
-        categorySubmit.value=`${category.name}`
+        categorySubmit.value=`${category.id}`
         categorySubmit.innerHTML=`${category.name}`
 
         listSubmit.appendChild(categorySubmit)
@@ -239,7 +239,7 @@ export function log () {
             const titleValue = formData.get('title');
             const categoryValue = formData.get('list');
 
-            formData.append('image', imageValue);
+            formData.append('image', imageValue, '');
             formData.append('title', titleValue);
             formData.append('category', categoryValue);
 
@@ -252,7 +252,6 @@ export function log () {
             
         })
 
-        const form = document.getElementById("form");
 
     // // Add an event listener for the form submission
     // form.addEventListener("submit", async (event) => {
@@ -308,4 +307,30 @@ function modaleDeleteDisplay () {
 function modaleAddDisplay () {
     modaleDelete.classList.toggle("display_modale")
     modaleAdd.classList.toggle("display_modale")
+}
+
+async function sendWork (formData, storedToken) {
+    try {
+        const authorizationHeader = `Bearer ${storedToken}`;
+        console.log('Authorization Header:', authorizationHeader);
+        const response = await fetch(`http://localhost:5678/api/works`, {
+            method: "POST",
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${storedToken}`,
+            },
+            body: formData,
+        });
+        console.log(response)
+        if (response.ok) {
+            console.log("added")
+            
+        }else{
+            const errorText = await response.text()
+            console.error(`Failed to add work. Server response: ${errorText}`)
+        }
+    } 
+    catch (error) {
+        console.error("error during add:", error.message)
+    }
 }
