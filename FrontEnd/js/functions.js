@@ -249,6 +249,7 @@ export function log () {
             console.log(formData);
 
             sendWork(formData, storedToken)
+            
         })
 
         const form = document.getElementById("form");
