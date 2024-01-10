@@ -31,7 +31,7 @@ async function handleDeletWork (deleteWork, storedToken) {
             galleryFigureToRemove.forEach((figure) => {
                 figure.remove()
             })
-            modaleAddDisplay()
+            modaleDeleteDisplay()
         }else{
             console.error("Failed to delete work. Server response: ${errorText}")
         }
