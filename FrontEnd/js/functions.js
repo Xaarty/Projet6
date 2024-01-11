@@ -11,6 +11,7 @@ const inputImg = document.getElementById("input_img")
 const imageInput = document.getElementById("image");
 const inputImgContent = document.getElementById("input_img_content")
 const listSubmit = document.getElementById("list")
+const submitButton = document.getElementById("submit")
 // fonction asynchrone pour effacer les projets 
 
 async function handleDeletWork (deleteWork, storedToken) {
@@ -229,24 +230,33 @@ export function log () {
         });
 
         // fonction pour l'envoie de nouveaux projets
-
+        const formContent = document.querySelectorAll(".form_content")
+        const test = [false, false, false]
+        formContent.forEach((el, id) => {
+            el.addEventListener("input", () => {
+                if (el.value === "") {
+                    test[id] = false
+                }else{
+                    test[id] = true
+                }
+                const test2 = test.filter((el)=> el === false)
+                console.log(test2)
+                if (test2.length === 0) {
+                    submitButton.disabled = false
+                    console.log("df")
+                }else{
+                    submitButton.disabled = true
+                }
+                
+            })
+        }) 
+        console.log(formContent)
         const formWork = document.getElementById("form")
 
         formWork.addEventListener("submit", (event) => {
             event.preventDefault()
-            const formData = new FormData(form);
-            const imageValue = formData.get('image');
-            const titleValue = formData.get('title');
-            const categoryValue = formData.get('list');
-
-            formData.append('image', imageValue, '');
-            formData.append('title', titleValue);
-            formData.append('category', categoryValue);
-
-            console.log(categoryValue);
-            console.log(imageValue);
-            console.log(titleValue);
-            console.log(formData);
+            const formData = new FormData(formWork)
+            
 
             sendWork(formData, storedToken)
             
@@ -311,13 +321,13 @@ function modaleAddDisplay () {
 
 async function sendWork (formData, storedToken) {
     try {
-        const authorizationHeader = `Bearer ${storedToken}`;
-        console.log('Authorization Header:', authorizationHeader);
+        const authorizationHeader = `Bearer ${storedToken}`
+        console.log('Authorization Header:', authorizationHeader)
         const response = await fetch(`http://localhost:5678/api/works`, {
             method: "POST",
             headers: {
                 'accept': 'application/json',
-                'Authorization': `Bearer ${storedToken}`,
+                'Authorization' : `Bearer ${storedToken}`,
             },
             body: formData,
         });
@@ -326,8 +336,7 @@ async function sendWork (formData, storedToken) {
             console.log("added")
             
         }else{
-            const errorText = await response.text()
-            console.error(`Failed to add work. Server response: ${errorText}`)
+            console.error(`Failed to add work. Server response: ${ErrorEvent}`)
         }
     } 
     catch (error) {
