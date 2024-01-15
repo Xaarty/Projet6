@@ -4,7 +4,7 @@ let works = null
 let categories = null
 const gallery = document.querySelector(".gallery")
 
-async function getWorks() {
+export async function getWorks() {
     const reponse = await fetch("http://localhost:5678/api/works")
     const work = await reponse.json()
     return work
