@@ -1,6 +1,8 @@
+import { getWorks } from "./script.js"
+
 const gallery = document.querySelector(".gallery")
 const portfolio = document.getElementById("portfolio")
-
+const portfolioTitleGroup = document.getElementById("portfolio_title_group")
 const logs = document.getElementById("logs")
 const modaleDelete = document.querySelector(".modale_delete")
 const modaleAdd = document.querySelector(".modale_add")
@@ -50,7 +52,6 @@ export function createWork (works) {
     works.forEach((work) => {
 
         let figure = document.createElement("figure")
-        //mentorat
         figure.dataset.id =`${work.id}`
         figure.innerHTML=`
             <img src="${work.imageUrl}" alt="${work.title}"/>
@@ -131,6 +132,10 @@ export function createButtonCategory(categories) {
     }
     sortingButtons.appendChild(allButton)
 
+    let categorySubmitZero = document.createElement("option")
+    categorySubmitZero.value= ""
+    listSubmit.appendChild(categorySubmitZero)    
+
     categories.forEach((category) => {
         let sortButton = document.createElement("button")
         sortButton.classList.add("sort_button")
@@ -174,8 +179,8 @@ export function log () {
             </svg>
             <p>modifier</p>
         `
-        portfolio.appendChild(buttonOpenModale)
-        portfolioH2.style.marginBottom = "92px"
+        portfolioTitleGroup.appendChild(buttonOpenModale)
+        portfolioTitleGroup.style.marginBottom = "92px"
 
         // gère la fermeture de la modale   
         const toogleButton = document.querySelectorAll(".toogle_modale")
@@ -190,8 +195,7 @@ export function log () {
                             let imgToRemove = inputImg.querySelector("img")
                             imgToRemove.remove()
                         }
-                        modaleAdd.classList.toggle("display_modale")
-                        modaleDelete.classList.toggle("display_modale")
+                        modaleAddDisplay()
                     }
                 } 
             });
@@ -231,23 +235,24 @@ export function log () {
 
         // fonction pour l'envoie de nouveaux projets
         const formContent = document.querySelectorAll(".form_content")
-        const test = [false, false, false]
+        const elementArray = [false, false, false]
         formContent.forEach((el, id) => {
             el.addEventListener("input", () => {
                 if (el.value === "") {
-                    test[id] = false
+                    elementArray[id] = false
                 }else{
-                    test[id] = true
+                    elementArray[id] = true
                 }
-                const test2 = test.filter((el)=> el === false)
-                console.log(test2)
-                if (test2.length === 0) {
+                const falseList = elementArray.filter((el)=> el === false)
+                console.log(falseList)
+                if (falseList.length === 0) {
                     submitButton.disabled = false
-                    console.log("df")
+                    submitButton.style.background = "#1D6154"
+                    console.log("tout les éléments sont valide")
                 }else{
                     submitButton.disabled = true
+                    submitButton.style.background = "#A7A7A7"
                 }
-                
             })
         }) 
         console.log(formContent)
@@ -258,8 +263,7 @@ export function log () {
             const formData = new FormData(formWork)
             
 
-            sendWork(formData, storedToken)
-            
+            sendWork(formData, storedToken, formWork)
         })
 
 
@@ -319,7 +323,12 @@ function modaleAddDisplay () {
     modaleAdd.classList.toggle("display_modale")
 }
 
-async function sendWork (formData, storedToken) {
+function modaleAddClose () {
+    modaleAdd.classList.toggle("display_modale")
+    overlay.classList.toggle("display_overlay")
+}
+
+async function sendWork (formData, storedToken, formWork) {
     try {
         const authorizationHeader = `Bearer ${storedToken}`
         console.log('Authorization Header:', authorizationHeader)
@@ -334,7 +343,14 @@ async function sendWork (formData, storedToken) {
         console.log(response)
         if (response.ok) {
             console.log("added")
-            
+            let works = await getWorks()
+            createWork(works, gallery)
+            createGalleryWork(works, modaleGallery)
+            modaleAddClose()
+            formWork.reset()
+            const previewImage = document.querySelector(".image_preview")
+            previewImage.remove()
+            inputImgContent.style.display = "grid"
         }else{
             console.error(`Failed to add work. Server response: ${ErrorEvent}`)
         }
@@ -343,3 +359,4 @@ async function sendWork (formData, storedToken) {
         console.error("error during add:", error.message)
     }
 }
+
