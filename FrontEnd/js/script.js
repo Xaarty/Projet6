@@ -1,4 +1,5 @@
-import {createWork, createButtonCategory, createGalleryWork, handleFilter, log} from './functions.js'
+import {log} from './api.js'
+import {createWork, handleFilter, createGalleryWork, createButtonCategory} from './works.js'
 
 let works = null
 let categories = null
