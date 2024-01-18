@@ -1,13 +1,14 @@
+// works.js
 import { getWorks } from "./script.js"
 import {modaleAddDisplay, modaleDeleteDisplay} from "./modales.js"
-
+import { deleteExistingImage } from "./imagePreview.js"
 const gallery = document.querySelector(".gallery")
 const modaleGallery = document.getElementById("gallery_photo")
 const portfolio = document.getElementById("portfolio")
 const listSubmit = document.getElementById("list")
 const inputImgContent = document.getElementById("input_img_content")
-// fonction asynchrone pour effacer les projets 
 
+// fonction asynchrone pour effacer les projets en communiquant avec l'api 
 export async function handleDeletWork (deleteWork, storedToken) {
     try {
         const authorizationHeader = `Bearer ${storedToken}`;
@@ -21,6 +22,7 @@ export async function handleDeletWork (deleteWork, storedToken) {
         });
         if (response.ok) {
             console.log("deleted")
+            // supprime les photos dans les deux galleries grace à l'id
             const galleryFigureToRemove = document.querySelectorAll(`figure[data-id="${deleteWork.dataset.id}"]`)
             console.log(galleryFigureToRemove)
             galleryFigureToRemove.forEach((figure) => {
@@ -38,7 +40,6 @@ export async function handleDeletWork (deleteWork, storedToken) {
 
 
 // fonction pour importer les travaux de "getWorks" dans la section portfolio 
-
 export function createWork (works) {
     gallery.innerHTML=""
     works.forEach((work) => {
@@ -55,21 +56,21 @@ export function createWork (works) {
 }
 
 // fonction pour filtrer les catégories des travaux et afficher ceux concerner 
-
 export function handleFilter(works) {
-    
-
     let sortingButtons = document.querySelectorAll(".sort_button")
 
     sortingButtons.forEach((sortButton) => {
         sortButton.addEventListener ("click", (event) => {
             if (event.button === 0) {
+                // supprime la classe "selected" et l'ajoute à l'élément cliqué
                 removeSelected(sortingButtons)
                 sortButton.classList.add("button_selected")
                 console.log(sortButton)
+                // catégorie "tous"
                 if (sortButton.dataset.id == 0) {
                     createWork(works)
                 } else {
+                    // filtre les travaux à afficher en conparant leur id à id du bouton selectionné
                     const filterWorks = works.filter((work) => work.categoryId == sortButton.dataset.id)
                     console.log(filterWorks)
                     createWork(filterWorks)
@@ -80,7 +81,6 @@ export function handleFilter(works) {
 }
 
 // fonction pour enlever la classe "button_selected"
-
 function removeSelected (sortingButtons) {
     sortingButtons.forEach(sortButton => {
         sortButton.classList.remove("button_selected")
@@ -88,11 +88,9 @@ function removeSelected (sortingButtons) {
 }
 
 // fonction pour générer les travaux existant dans la partie gallerie de la modaledelete
-
 export function createGalleryWork (works) {
     modaleGallery.innerHTML=""
     works.forEach((work) => {
-
         let figure = document.createElement("figure")
         figure.dataset.id = `${work.id}`
         figure.classList.add("delete_work_photo")
@@ -108,6 +106,7 @@ export function createGalleryWork (works) {
     })
 }
 
+// fonction asynchrone qui communique avec l'api pour envoyer un nouveau travail
 export async function sendWork (formData, storedToken, form) {
     try {
         const authorizationHeader = `Bearer ${storedToken}`
@@ -123,14 +122,15 @@ export async function sendWork (formData, storedToken, form) {
         console.log(response)
         if (response.ok) {
             console.log("added")
+            // récupère tout les travaux avec le nouveau et les réintegre
             let works = await getWorks()
             createWork(works, gallery)
             createGalleryWork(works, modaleGallery)
+
+            // ferme la modale et efface la prévisualisation d'image
             modaleAddDisplay()
             form.reset()
-            const previewImage = document.querySelectorAll(".image_preview")
-            console.log(previewImage)
-            previewImage.remove()
+            deleteExistingImage()
             inputImgContent.style.display = "grid"
         }else{
             console.error(`Failed to add work. Server response:`, error.message)
@@ -141,13 +141,14 @@ export async function sendWork (formData, storedToken, form) {
     }
 }
 
-// fonction pour créer les boutons de tri de catégories des travaux
-
+// fonction pour créer les boutons de tri de catégories des travaux dans les deux galleries
 export function createButtonCategory(categories) {
+    // assure la création de la div qui va contenir les boutons de tri et les places avant la gallerie
     let sortingButtons = document.createElement("div")
     sortingButtons.id = "sorting_buttons"
-    portfolio.insertBefore(sortingButtons, gallery)
+    portfolio.insertBefore(sortingButtons, gallery)  
 
+    // créer le bouton pour afficher tout les travaux
     let allButton = document.createElement("button")
     allButton.classList.add("sort_button")
     allButton.dataset.id = "0"
@@ -157,11 +158,14 @@ export function createButtonCategory(categories) {
     }
     sortingButtons.appendChild(allButton)
 
+    // créer l'option vide dans la liste du form pour submit un travail 
     let categorySubmitZero = document.createElement("option")
     categorySubmitZero.value= ""
     listSubmit.appendChild(categorySubmitZero)    
 
+    // boucle sur les catégories existantes
     categories.forEach((category) => {
+        // créer les boutons de catégories dans la div de bouton de tri
         let sortButton = document.createElement("button")
         sortButton.classList.add("sort_button")
         sortButton.dataset.id = `${category.id}`
@@ -170,6 +174,7 @@ export function createButtonCategory(categories) {
         `
         sortingButtons.appendChild(sortButton)
 
+        // créer les options dans la liste du form pour submit un travail
         let categorySubmit = document.createElement("option")
         categorySubmit.value=`${category.id}`
         categorySubmit.innerHTML=`${category.name}`

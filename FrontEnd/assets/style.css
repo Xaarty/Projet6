@@ -421,6 +421,7 @@ a {
 	text-align: center;
 	border-radius: 60px;
 	box-shadow: none;
+	border: none;
 }
 
 #section_login a {

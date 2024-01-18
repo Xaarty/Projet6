@@ -1,9 +1,14 @@
+// script.js
 import {log} from './api.js'
 import {createWork, handleFilter, createGalleryWork, createButtonCategory} from './works.js'
+import { imagePreview } from './imagePreview.js'
 
 let works = null
 let categories = null
 const gallery = document.querySelector(".gallery")
+
+
+// fonction pour récupérer les travaux existant depuis l'api
 
 export async function getWorks() {
     const reponse = await fetch("http://localhost:5678/api/works")
@@ -11,13 +16,15 @@ export async function getWorks() {
     return work
 }  
 
+// fonction pour récupérer les catégories existantes depuis l'api
+
 async function getCategories() {
     const reponse = await fetch("http://localhost:5678/api/categories")
     const category = await reponse.json()
     return category
 }
 
-
+// fonction qui lance le fonctionnement des scripts
 
 async function init() {
     works = await getWorks()
