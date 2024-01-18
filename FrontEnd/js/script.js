@@ -6,7 +6,7 @@ import { imagePreview } from './imagePreview.js'
 let works = null
 let categories = null
 const gallery = document.querySelector(".gallery")
-
+const imageInput = document.getElementById("image")
 
 // fonction pour récupérer les travaux existant depuis l'api
 
@@ -47,5 +47,5 @@ async function init() {
 
 init()
 
-
+imageInput.addEventListener("change", imagePreview)
 
