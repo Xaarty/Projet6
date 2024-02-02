@@ -1,11 +1,11 @@
 // api.js
 import { handleDeletWork, sendWork } from "./works.js"
-import { handleModaleClosure, modaleChange } from "./modales.js"
+import { handleModaleClosure, modaleAddDisplay, modaleChange } from "./modales.js"
 
 const portfolioTitleGroup = document.getElementById("portfolio_title_group")
 const logs = document.getElementById("logs")
 const modaleDelete = document.querySelector(".modale_delete")
-
+const modaleAdd = document.querySelector(".modale_add")
 const submitButton = document.getElementById("submit")
 
 // fonction qui gère la connexion de la cliente à son compte pour pouvoir gérer ses travaux
@@ -47,6 +47,7 @@ export function log () {
     // gère le cas ou on n'est pas loggin, enleve l'acces aux modales
     }else{
         modaleDelete.remove()
+        modaleAdd.remove()
         overlay.remove()
     }
 }
