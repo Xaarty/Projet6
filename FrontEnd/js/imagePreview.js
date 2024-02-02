@@ -1,4 +1,3 @@
-const imageInput = document.getElementById("image")
 const inputImgContent = document.getElementById("input_img_content")
 const inputImg = document.getElementById("input_img")
 
@@ -7,6 +6,10 @@ export function imagePreview(event) {
     
     deleteExistingImage()
 
+    if (event.target.files[0] === undefined) {
+        inputImgContent.style.display = "grid"
+        return
+    } 
     console.log("File selected:", event.target.files[0]);
     let imageDownloaded = URL.createObjectURL(event.target.files[0]); // prend l'url de l'image sélectionné par l'utilisateur
     let newImage = document.createElement("img");
@@ -16,7 +19,7 @@ export function imagePreview(event) {
     inputImgContent.style.display = "none"
 }
 
-imageInput.addEventListener("change", imagePreview)
+
 
 // fonction qui efface l'image précédente si l'utilisateur veut en mettre une autre sans fermer la modale
 export function deleteExistingImage() {
