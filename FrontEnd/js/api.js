@@ -7,7 +7,7 @@ const logs = document.getElementById("logs")
 const modaleDelete = document.querySelector(".modale_delete")
 const modaleAdd = document.querySelector(".modale_add")
 const submitButton = document.getElementById("submit")
-
+const toolbar = document.querySelector(".toolbar")
 // fonction qui gère la connexion de la cliente à son compte pour pouvoir gérer ses travaux
 export function log () {
     
@@ -22,7 +22,6 @@ export function log () {
     // gère le cas ou l'utilisateur est loggin
     if (loggedIn === "true") {
         logs.innerHTML = "logout"
-
         // gère le logout
         logout()
 
@@ -49,6 +48,7 @@ export function log () {
         modaleDelete.remove()
         overlay.remove()
         modaleAdd.remove()
+        toolbar.remove()
     }
 }
 

@@ -163,8 +163,7 @@ body {
 
 header {
 	display: flex;
-	justify-content: space-between;
-	margin: 38px 150px;
+	flex-direction: column;
 }
 
 section {
@@ -637,4 +636,27 @@ a {
 	height: 169px;
 	padding-left: 145.5px;
 	object-fit: cover;
+}
+
+.toolbar {
+	display: flex;
+	width: 100%;
+	height: 59px;
+	background: #000;
+	justify-content: center;
+	align-items: center;
+}
+
+.nav {
+	display: flex;
+	margin: 38px 150px;
+	justify-content: space-between;
+}
+
+.toolbar_txt {
+	display: flex;
+	color: #FFF;
+	width: 129px;
+	gap: 11.42px;
+	
 }
