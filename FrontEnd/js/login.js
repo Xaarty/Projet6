@@ -1,4 +1,4 @@
-// log.js
+// login.js
 const emailInput = document.getElementById("email")
 const passwordInput = document.getElementById("password")
 const loginForm = document.getElementById("login_form")
@@ -20,7 +20,7 @@ async function getIds(email, password) {
 }
 
 // fonction qui gère le processus de login, conserve dans le local storage les information utilisateur et renvoie qur la page d'acceuil
-async function log() {
+async function login() {
     const email = emailInput.value
     const password = passwordInput.value
     console.log(email)
@@ -55,5 +55,5 @@ loginForm.addEventListener("submit", async (event) => {
     // évite le refresh de page 
     event.preventDefault();  
     console.log("Formulaire soumis");
-    log();
+    login();
 });
